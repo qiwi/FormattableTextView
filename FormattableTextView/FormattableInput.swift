@@ -73,13 +73,8 @@ public protocol FormattableInput: class, UITextInput {
 
 internal protocol FormattableInputInternal: FormattableInput where Self: UIView {
     var internalAttributedText: NSAttributedString { get set }
-    
-    var format: String? { get }
+	
     var formatInputChars: Set<Character>! { get }
-    var formatSymbols: [Character: CharacterSet] { get }
-    var maskAttributes: [NSAttributedString.Key: Any]! { get }
-    var inputAttributes: [NSAttributedString.Key: Any] { get }
-	var maskAppearance: MaskAppearance { get }
     
     /// Non-input elements of format which will be drawn in separate layers
     var maskLayers: [Int: CALayer] { get set }
@@ -194,10 +189,10 @@ extension FormattableInputInternal {
                 if isFirstInputSymbol {
                     isFirstInputSymbol = false
                     if !prevFormat.isEmpty {
-                        fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.encodedOffset, prevFormat: prevFormat, dx: &dx)
+                        fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
                     }
                 } else {
-                    let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.encodedOffset, prevFormat: prevFormat, dx: &dx)
+                    let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
 					if (maskAppearance.isWhole && allowIncrementingInputSymbolIndex || !maskAppearance.isWhole) && !mutableAttributedString.string.isEmpty {
 						mutableAttributedString.addAttribute(NSAttributedString.Key.kern, value: width, range: NSMakeRange(inputSymbolNumber-1, 1))
 					}
