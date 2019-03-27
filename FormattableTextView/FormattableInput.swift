@@ -189,10 +189,10 @@ extension FormattableInputInternal {
                 if isFirstInputSymbol {
                     isFirstInputSymbol = false
                     if !prevFormat.isEmpty {
-                        fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
+                        fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.encodedOffset, prevFormat: prevFormat, dx: &dx)
                     }
                 } else {
-                    let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
+                    let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.encodedOffset, prevFormat: prevFormat, dx: &dx)
 					if (maskAppearance.isWhole && allowIncrementingInputSymbolIndex || !maskAppearance.isWhole) && !mutableAttributedString.string.isEmpty {
 						mutableAttributedString.addAttribute(NSAttributedString.Key.kern, value: width, range: NSMakeRange(inputSymbolNumber-1, 1))
 					}
