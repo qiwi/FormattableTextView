@@ -65,15 +65,6 @@ final class ViewController: UIViewController {
 			textFields.append(tv)
 		}
 		buttonMaskWholeTouched(nil)
-		
-		let field = FormattableTextField()
-		field.formatSymbols = ["d": CharacterSet.decimalDigits,
-							   "w": CharacterSet.lowercaseLetters]
-		field.format = "dd.dd.dddd"
-		field.maskAppearance = .leftOnly
-		field.inputAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
-		field.maskAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),
-								NSAttributedString.Key.foregroundColor: UIColor.lightGray]
 	}
 	
 	@IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
