@@ -28,6 +28,8 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			}
 			setupMask()
 			setLeftInset()
+			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
+			updateMask()
 		}
 	}
 	

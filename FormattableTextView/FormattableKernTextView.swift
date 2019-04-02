@@ -94,6 +94,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
             }
             setupMask()
             setLeftInset()
+			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
+			updateMask()
         }
     }
 	
