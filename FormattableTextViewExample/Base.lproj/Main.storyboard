@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,7 +14,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FormattedTextViewExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FormattableTextViewExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,7 +23,7 @@
                                 <rect key="frame" x="16" y="60" width="343" height="702"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPd-7q-Wwr">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="416.33333333333331"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="404.33333333333331"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ut9-N1-dE7">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="308"/>
@@ -192,14 +192,14 @@
                                         </constraints>
                                     </scrollView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qDN-by-NYf">
-                                        <rect key="frame" x="0.0" y="424.33333333333331" width="343" height="1"/>
+                                        <rect key="frame" x="0.0" y="412.33333333333331" width="343" height="1"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="a6A-Re-zr4"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="RMM-Za-zgr">
-                                        <rect key="frame" x="0.0" y="433.33333333333326" width="343" height="268.66666666666674"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="RMM-Za-zgr">
+                                        <rect key="frame" x="0.0" y="421.33333333333326" width="343" height="280.66666666666674"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7eX-6f-0S4">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="1"/>
@@ -212,7 +212,7 @@
                                                 </connections>
                                             </segmentedControl>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="WtC-0Z-Yln">
-                                                <rect key="frame" x="0.0" y="8" width="343" height="52"/>
+                                                <rect key="frame" x="0.0" y="12" width="343" height="52"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mask appearance:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L1v-Jc-PVj">
                                                         <rect key="frame" x="0.0" y="0.0" width="140.33333333333334" height="0.0"/>
@@ -232,6 +232,11 @@
                                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                                 <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                                                 <state key="normal" title="Left only"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="8"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="buttonItalicTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="L1m-sP-YX8"/>
                                                                     <action selector="buttonMaskLeftOnlyTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BRk-fC-skr"/>
@@ -247,6 +252,11 @@
                                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                                 <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                                                 <state key="normal" title="Left &amp; right"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="8"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="buttonBoldTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wnW-88-ff3"/>
                                                                     <action selector="buttonMaskLeftAndRightTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xey-bU-Tu2"/>
@@ -261,6 +271,11 @@
                                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                                 <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="8" maxY="0.0"/>
                                                                 <state key="normal" title="Whole"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="8"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="buttonItalicTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DqV-A4-0SZ"/>
                                                                     <action selector="buttonMaskWholeTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OTb-ry-F9h"/>
@@ -271,13 +286,13 @@
                                                 </subviews>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mask format attributes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="58P-FR-I9X">
-                                                <rect key="frame" x="0.0" y="68.000000000000057" width="343" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="76.000000000000057" width="343" height="0.0"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="MGg-Uw-dXN">
-                                                <rect key="frame" x="0.0" y="76.000000000000043" width="343" height="192.66666666666663"/>
+                                                <rect key="frame" x="0.0" y="88.000000000000043" width="343" height="192.66666666666663"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="z8U-ej-scj">
                                                         <rect key="frame" x="0.0" y="0.0" width="201.66666666666666" height="20.333333333333332"/>
@@ -297,7 +312,7 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="16" minimumValue="8" maximumValue="48" translatesAutoresizingMaskIntoConstraints="NO" id="MA6-Cd-Drd">
+                                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="16" minimumValue="8" maximumValue="29" translatesAutoresizingMaskIntoConstraints="NO" id="MA6-Cd-Drd">
                                                                         <rect key="frame" x="26" y="0.0" width="94" height="29"/>
                                                                         <connections>
                                                                             <action selector="stepperValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="xKc-pY-4Ca"/>
@@ -328,6 +343,11 @@
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                                                         <state key="normal" title="N"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonItalicTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jPH-Ge-oNS"/>
                                                                             <action selector="buttonNormalTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fht-gV-gQu"/>
@@ -342,6 +362,11 @@
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                                                         <state key="normal" title="B"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonBoldTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bnX-QF-i8a"/>
                                                                         </connections>
@@ -355,6 +380,11 @@
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="italicSystem" pointSize="32"/>
                                                                         <state key="normal" title="I"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonItalicTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bnw-a8-4UI"/>
                                                                         </connections>
@@ -382,6 +412,11 @@
                                                                             <constraint firstAttribute="height" constant="44" id="BPX-Tm-jus"/>
                                                                             <constraint firstAttribute="width" constant="44" id="YWt-OW-nzy"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0os-8O-zcb"/>
                                                                         </connections>
@@ -393,6 +428,11 @@
                                                                             <constraint firstAttribute="width" constant="44" id="BFK-XU-Yjz"/>
                                                                             <constraint firstAttribute="height" constant="44" id="GQ0-M6-use"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gL5-Xr-2FN"/>
                                                                         </connections>
@@ -404,6 +444,11 @@
                                                                             <constraint firstAttribute="width" constant="44" id="FY9-2G-Wah"/>
                                                                             <constraint firstAttribute="height" constant="44" id="u0f-6T-1cb"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uWH-rK-Dkz"/>
                                                                         </connections>
@@ -415,6 +460,11 @@
                                                                             <constraint firstAttribute="width" constant="44" id="9di-Rz-Ask"/>
                                                                             <constraint firstAttribute="height" constant="44" id="mKI-Sd-N2Y"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VCq-xK-PhN"/>
                                                                         </connections>
@@ -426,6 +476,11 @@
                                                                             <constraint firstAttribute="height" constant="44" id="Pfs-Vy-0Dj"/>
                                                                             <constraint firstAttribute="width" constant="44" id="hSj-O9-GW8"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ju0-DK-tDE"/>
                                                                         </connections>
@@ -437,6 +492,11 @@
                                                                             <constraint firstAttribute="width" constant="44" id="1DV-ra-0bc"/>
                                                                             <constraint firstAttribute="height" constant="44" id="hWW-km-HeJ"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <integer key="value" value="8"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="buttonColorTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kty-R4-13D"/>
                                                                         </connections>
