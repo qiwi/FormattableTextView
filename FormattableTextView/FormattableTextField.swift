@@ -98,6 +98,15 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	
 	private var delegateProxy = DelegateProxy()
 	
+	override open var delegate: UITextFieldDelegate? {
+		get {
+			return delegateProxy
+		}
+		set {
+			self.delegateProxy.userDelegate = newValue
+		}
+	}
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		super.delegate = delegateProxy
