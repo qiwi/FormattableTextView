@@ -85,7 +85,6 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	internal var internalInsetX: CGFloat = 0
-	
 	internal var internalInsetY: CGFloat = 0
 	
 	override open func textRect(forBounds bounds: CGRect) -> CGRect {
@@ -93,7 +92,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-		return bounds.insetBy(dx: internalInsetX + insetX, dy: internalInsetY)
+		return textRect(forBounds: bounds)
 	}
 	
 	private var delegateProxy = DelegateProxy()
