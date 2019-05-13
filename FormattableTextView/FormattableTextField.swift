@@ -12,6 +12,10 @@ import UIKit
 @IBDesignable
 open class FormattableTextField: UITextField, FormattableInput, FormattableInputInternal {
 	
+	var useIntegerCoordinates: Bool {
+		return false
+	}
+	
 	internal var internalAttributedText: NSAttributedString {
 		get {
 			return self.attributedText ?? NSAttributedString(string: "")
@@ -47,6 +51,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			for (key, value) in inputAttributes {
 				maskAttributes[key] = value
 			}
+			typingAttributes = inputAttributes
 		}
 	}
 	
@@ -121,6 +126,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	private func customInit() {
 		setupMask()
 		maskAttributes = inputAttributes
+		typingAttributes = inputAttributes
 	}
 	
 	private func setupFormatChars() {

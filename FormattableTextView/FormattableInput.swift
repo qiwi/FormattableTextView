@@ -87,6 +87,8 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	
 	/// real y inset for input text
 	var internalInsetY: CGFloat { get set }
+	
+	var useIntegerCoordinates: Bool { get }
     
     func updateInsetY()
     func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult
@@ -99,8 +101,7 @@ extension FormattableInputInternal {
         if let layer = maskLayers[key] {
             return (action: .change, layer: layer)
         } else {
-			let layer = CALayer(text: prevFormat, attributes: maskAttributes)
-			layer.edgeAntialiasingMask = .layerTopEdge
+			let layer = CALayer(text: prevFormat, attributes: maskAttributes, useIntegerCoordinates: useIntegerCoordinates)
             return (action: .add, layer: layer)
         }
     }
@@ -144,7 +145,7 @@ extension FormattableInputInternal {
 		case .whole(let placeholders):
 			guard let inputFont = inputAttributes[NSAttributedString.Key.font] as? UIFont, let maskFont = maskAttributes[NSAttributedString.Key.font] as? UIFont else { return }
 			if let placeholderChar = placeholders[char] {
-				let layer = CALayer(text: String(placeholderChar), attributes: maskAttributes)
+				let layer = CALayer(text: String(placeholderChar), attributes: maskAttributes, useIntegerCoordinates: useIntegerCoordinates)
 				layer.frame.origin.y = internalInsetY.rounded() - (maskFont.lineHeight-inputFont.lineHeight)/2
 				layer.frame.origin.x = insetX + CGFloat(maskSymbolNumber) * symbolWidth
 				newMaskPlaceholders.append(layer)

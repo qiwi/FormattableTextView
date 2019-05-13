@@ -12,6 +12,11 @@ import UIKit
 @IBDesignable
 open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {
 	
+	var useIntegerCoordinates: Bool {
+		return true
+	}
+	
+	
 	var internalAttributedText: NSAttributedString {
 		get {
 			return self.attributedText
