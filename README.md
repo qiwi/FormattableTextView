@@ -77,10 +77,3 @@ You can modify input and non-input symbols appearance by using `inputAttributes`
 
 ## License
 Distributed under the MIT License.
-
-## Author
-Mikhail Motyzhenkov
-
-E-mail: m.motyzhenkov@gmail.com
-
-Telegram: @motyzhenkovmd
