@@ -215,6 +215,7 @@ extension FormattableTextField {
 				} else {
 					formattableTextField.setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
 				}
+				textField.sendActions(for: .editingChanged)
 				return false
 			case .notAllowed:
 				return false
