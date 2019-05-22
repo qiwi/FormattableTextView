@@ -211,11 +211,12 @@ extension FormattableTextField {
 				if let userResult = userResult {
 					if userResult {
 						formattableTextField.setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+						textField.sendActions(for: .editingChanged)
 					}
 				} else {
 					formattableTextField.setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+					textField.sendActions(for: .editingChanged)
 				}
-				textField.sendActions(for: .editingChanged)
 				return false
 			case .notAllowed:
 				return false
