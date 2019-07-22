@@ -10,14 +10,13 @@ import Foundation
 import UIKit
 
 extension CALayer {
-	convenience init(text: String, attributes: [NSAttributedString.Key: Any], useIntegerCoordinates: Bool) {
+	convenience init(text: String, attributes: [NSAttributedString.Key: Any]) {
 		let size = (text as NSString).size(withAttributes: attributes)
-		let realSize = useIntegerCoordinates ? CGSize(width: round(size.width), height: round(size.height)) : size
 		self.init()
-		self.frame = CGRect(origin: CGPoint.zero, size: realSize)
+		self.frame = CGRect(origin: CGPoint.zero, size: size)
 		
-		UIGraphicsBeginImageContextWithOptions(realSize, false, UIScreen.main.scale)
-		(text as NSString).draw(with: CGRect(origin: CGPoint.zero, size: realSize), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: attributes, context: nil)
+		UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+		(text as NSString).draw(with: CGRect(origin: CGPoint.zero, size: size), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: attributes, context: nil)
 		let img = UIGraphicsGetImageFromCurrentImageContext()
 		UIGraphicsEndImageContext()
 		

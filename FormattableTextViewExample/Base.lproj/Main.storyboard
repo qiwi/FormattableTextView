@@ -312,7 +312,7 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="16" minimumValue="8" maximumValue="29" translatesAutoresizingMaskIntoConstraints="NO" id="MA6-Cd-Drd">
+                                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="16" minimumValue="8" maximumValue="28" translatesAutoresizingMaskIntoConstraints="NO" id="MA6-Cd-Drd">
                                                                         <rect key="frame" x="26" y="0.0" width="94" height="29"/>
                                                                         <connections>
                                                                             <action selector="stepperValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="xKc-pY-4Ca"/>

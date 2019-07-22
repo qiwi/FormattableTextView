@@ -10,12 +10,7 @@ import Foundation
 import UIKit
 
 @IBDesignable
-open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {
-	
-	var useIntegerCoordinates: Bool {
-		return true
-	}
-	
+open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {	
 	
 	var internalAttributedText: NSAttributedString {
 		get {
@@ -98,7 +93,6 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
                 clearText()
             }
             setupMask()
-            setLeftInset()
 			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
 			updateMask()
         }
@@ -198,7 +192,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     }
     internal var formatInputChars: Set<Character>!
 	
-	var isFirstLayout = true
+	private var isFirstLayout = true
+	
 	open override func layoutSubviews() {
 		super.layoutSubviews()
 		if isFirstLayout && self.bounds != CGRect.zero {

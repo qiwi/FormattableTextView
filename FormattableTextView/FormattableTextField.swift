@@ -12,10 +12,6 @@ import UIKit
 @IBDesignable
 open class FormattableTextField: UITextField, FormattableInput, FormattableInputInternal {
 	
-	var useIntegerCoordinates: Bool {
-		return false
-	}
-	
 	internal var internalAttributedText: NSAttributedString {
 		get {
 			return self.attributedText ?? NSAttributedString(string: "")
@@ -31,7 +27,6 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 				clearText()
 			}
 			setupMask()
-			setLeftInset()
 			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
 			updateMask()
 		}
@@ -170,7 +165,8 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		}
 	}
 	
-	var isFirstLayout = true
+	private var isFirstLayout = true
+	
 	open override func layoutSubviews() {
 		super.layoutSubviews()
 		if isFirstLayout && self.bounds != CGRect.zero {
