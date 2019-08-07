@@ -29,6 +29,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			setupMask()
 			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
 			updateMask()
+			processNonInputSymbolsAtTheEnd()
 		}
 	}
 	
@@ -63,6 +64,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			updateMask()
 		}
 	}
+	
 	private func updateMask() {
 		setLeftInset()
 		for layer in maskLayers {
@@ -73,10 +75,10 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	internal var maskLayers = [Int: CALayer]()
-	
-	var maskPlaceholders = [CALayer]()
+	internal var maskPlaceholders = [CALayer]()
 	
 	internal var formatInputChars: Set<Character>!
+	internal var nonInputSymbolsAtTheEnd: String?
 	
 	@IBInspectable public var insetX: CGFloat = 5 {
 		didSet {

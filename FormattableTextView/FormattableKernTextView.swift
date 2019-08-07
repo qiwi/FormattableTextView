@@ -12,7 +12,7 @@ import UIKit
 @IBDesignable
 open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {	
 	
-	var internalAttributedText: NSAttributedString {
+	internal var internalAttributedText: NSAttributedString {
 		get {
 			return self.attributedText
 		}
@@ -95,6 +95,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
             setupMask()
 			maskPlaceholders.forEach { $0.removeFromSuperlayer() }
 			updateMask()
+			processNonInputSymbolsAtTheEnd()
         }
     }
 	
@@ -114,7 +115,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 		}
 	}
 	
-	var maskPlaceholders = [CALayer]()
+	internal var maskPlaceholders = [CALayer]()
+	internal var nonInputSymbolsAtTheEnd: String?
     
     private func setLeftInset() {
         guard let format = format else { return }

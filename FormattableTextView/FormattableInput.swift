@@ -87,6 +87,8 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	
 	/// real y inset for input text
 	var internalInsetY: CGFloat { get set }
+	
+	var nonInputSymbolsAtTheEnd: String? { get set }
     
     func updateInsetY()
     func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult
@@ -95,7 +97,7 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 
 extension FormattableInputInternal {
     
-    fileprivate func getOrCreateCurrentLayer(maskLayers: [Int: CALayer], maskAttributes: [NSAttributedString.Key: Any], key: Int, prevFormat: String) -> (action: ActionForLayer, layer: CALayer) {
+    private func getOrCreateCurrentLayer(maskLayers: [Int: CALayer], maskAttributes: [NSAttributedString.Key: Any], key: Int, prevFormat: String) -> (action: ActionForLayer, layer: CALayer) {
         if let layer = maskLayers[key] {
             return (action: .change, layer: layer)
         } else {
@@ -105,7 +107,7 @@ extension FormattableInputInternal {
     }
 	
 	@discardableResult
-    fileprivate func fillMaskLayersDiffAndIncrementDx(maskLayersDiff: inout MaskLayersDiff, maskLayers: [Int: CALayer], key: Int, prevFormat: String, dx: inout CGFloat) -> CGFloat {
+    private func fillMaskLayersDiffAndIncrementDx(maskLayersDiff: inout MaskLayersDiff, maskLayers: [Int: CALayer], key: Int, prevFormat: String, dx: inout CGFloat) -> CGFloat {
         let currentLayerResult = getOrCreateCurrentLayer(maskLayers: maskLayers, maskAttributes: maskAttributes, key: key, prevFormat: prevFormat)
         let layer = currentLayerResult.layer
 		guard let inputFont = inputAttributes[NSAttributedString.Key.font] as? UIFont, let maskFont = maskAttributes[NSAttributedString.Key.font] as? UIFont else { return 0 }
@@ -269,6 +271,22 @@ extension FormattableInputInternal {
 		}
 		maskPlaceholders = newMaskPlaceholders
 		
+		if let nonInputSymbolsAtTheEnd = self.nonInputSymbolsAtTheEnd {
+			var shouldCalculateDx = false
+			switch maskAppearance {
+			case .leftOnly:
+				shouldCalculateDx = true
+			case .leftAndRight:
+				shouldCalculateDx = state == .input
+			case .whole(_):
+				shouldCalculateDx = false			
+			}
+			if shouldCalculateDx {
+				calculateDx(dx: &dx, format: format, formatCurrentIndex: formatCurrentIndex, inputString: mutableAttributedString.string, lastInputStartIndex: lastInputStartIndex, inputIndex: inputIndex)
+			}
+			fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentIndex.utf16Offset(in: format), prevFormat: nonInputSymbolsAtTheEnd, dx: &dx)
+		}
+		
         let indicesToAdd = Set(maskLayersDiff.layersToAdd.map { $0.key })
         let indicesToChange = Set(maskLayersDiff.layersToChangeFrames.map { $0.key })
         maskLayersDiff.layersToDelete = self.maskLayers.map { $0.key }.filter { !indicesToAdd.contains($0) && !indicesToChange.contains($0) }
@@ -286,10 +304,13 @@ extension FormattableInputInternal {
             self.maskLayers[key] = value
             self.layer.addSublayer(value)
         }
+		CATransaction.begin()
+		CATransaction.setDisableActions(true)
         for (key, value) in maskLayersDiff.layersToChangeFrames {
             let layer = self.maskLayers[key]
             layer?.frame.origin = value
         }
+		CATransaction.commit()
         
         if let pos = self.position(from: self.beginningOfDocument, offset: location+offset) {
             self.selectedTextRange = self.textRange(from: pos, to: pos)
@@ -300,5 +321,19 @@ extension FormattableInputInternal {
 		if let inputFont = self.inputAttributes[NSAttributedString.Key.font] as? UIFont {
 			internalInsetY = (self.bounds.height - inputFont.lineHeight)/2
 		}
+	}
+	
+	func processNonInputSymbolsAtTheEnd() {
+		guard let format = self.format else { return }
+		var nonInputSymbolsAtTheEnd: String = ""
+		for char in format {
+			let isUserSymbol = self.formatInputChars.contains(char)
+			if isUserSymbol {
+				nonInputSymbolsAtTheEnd = ""
+			} else {
+				nonInputSymbolsAtTheEnd.append(char)
+			}
+		}
+		self.nonInputSymbolsAtTheEnd = nonInputSymbolsAtTheEnd
 	}
 }
