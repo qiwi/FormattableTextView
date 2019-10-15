@@ -135,11 +135,21 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		replaceText(inRange: NSMakeRange(0, 0), withText: "")
 	}
 	
+	override open var text: String! {
+        get {
+            return super.text
+        }
+        set {
+			replaceText(inRange: NSMakeRange(0, super.text?.count ?? 0), withText: newValue)
+        }
+    }
+	
 	private func replaceText(inRange range: NSRange, withText text: String) {
 		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
 		switch result {
-		case .allowed(let attributedString, _, _):
-			self.attributedText = attributedString
+		case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
+			setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+			self.sendActions(for: .editingChanged)
 		default:
 			break
 		}

@@ -67,14 +67,14 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     }
     
     private func replaceText(inRange range: NSRange, withText text: String) {
-        let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
-        switch result {
-        case .allowed(let attributedString, _, _):
-            self.attributedText = attributedString
-        default:
-            break
-        }
-    }
+		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
+		switch result {
+		case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
+			setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+		default:
+			break
+		}
+	}
     
     private func setupMask() {
         setupFormatChars()
