@@ -21,9 +21,9 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		}
 	}
 	
-	@IBInspectable open var format: String? = nil  {
+	open var formats: [String] = []  {
 		didSet {
-			if oldValue != nil {
+			if !oldValue.isEmpty {
 				clearText()
 			}
 			setupMask()
@@ -32,6 +32,8 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			processNonInputSymbolsAtTheEnd()
 		}
 	}
+	
+	public internal(set) var currentFormat: String?
 	
 	public var formatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
 														   "w": CharacterSet.letters,
@@ -162,7 +164,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	private func setLeftInset() {
-		guard let format = format else { return }
+		guard let format = currentFormat else { return }
 		var index = format.startIndex
 		for char in format {
 			if self.formatInputChars.contains(char) {

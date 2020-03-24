@@ -27,6 +27,13 @@ final class ViewController: UIViewController {
     let colors = [UIColor.black, UIColor.lightGray, UIColor.blue, UIColor.green, UIColor.red, UIColor.yellow]
     var textFields: [FormattableInput & UIView]!
     var alpha = 1.0
+	let formats = [
+		["dddd dddd dddd dddd"],
+		["wdddww dd"],
+		["+7(ddd)ddd-dd-dd",
+		"+44 07ddd dddddd"],
+		["dddddd ₽"]
+	]
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +57,13 @@ final class ViewController: UIViewController {
 			let tv = T.init()
 			tv.keyboardType = oldView.keyboardType
 			tv.backgroundColor = UIColor.white
-			tv.format = oldView.format
+			tv.formats = formats[i]
+			tv.formatSymbols = ["d": CharacterSet.decimalDigits,
+								"0": CharacterSet(charactersIn: "0"),
+								"4": CharacterSet(charactersIn: "4"),
+								"7": CharacterSet(charactersIn: "7"),
+								"w": CharacterSet.letters,
+								"*": CharacterSet(charactersIn: "").inverted]
 			tv.layer.cornerRadius = 5
 			if let superview = oldView.superview {
 				oldView.removeFromSuperview()
@@ -152,6 +165,9 @@ final class ViewController: UIViewController {
 			tv.maskAttributes = wholeMaskAttributes
 			tv.inputAttributes = wholeInputAttributes
 			tv.maskAppearance = .whole(placeholders: ["d": "0",
+													  "0": "0",
+													  "4": "4",
+													  "7": "7",
 													  "w": "A",
 													  "*": "*"])
 		}
