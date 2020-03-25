@@ -87,9 +87,9 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
         }
     }
     
-    @IBInspectable open var format: String? = nil  {
+    open var formats: [String] = [] {
         didSet {
-            if oldValue != nil {
+			if !oldValue.isEmpty {
                 clearText()
             }
             setupMask()
@@ -98,6 +98,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 			processNonInputSymbolsAtTheEnd()
         }
     }
+	
+	public internal(set) var currentFormat: String?
 	
 	private func updateMask() {
 		setLeftInset()
@@ -119,7 +121,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 	internal var nonInputSymbolsAtTheEnd: String?
     
     private func setLeftInset() {
-        guard let format = format else { return }
+        guard let format = currentFormat else { return }
         var index = format.startIndex
         for char in format {
             if self.formatInputChars.contains(char) {

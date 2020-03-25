@@ -52,7 +52,9 @@ internal enum ProcessAttributesResult {
 }
 
 public protocol FormattableInput: class, UITextInput {
-	var format: String? { get set }
+	var currentFormat: String? { get }
+	
+	var formats: [String] { get set }
 	
 	var maskAppearance: FormattableTextView.MaskAppearance { get set }
 	
@@ -73,6 +75,7 @@ public protocol FormattableInput: class, UITextInput {
 
 internal protocol FormattableInputInternal: FormattableInput where Self: UIView {
     var internalAttributedText: NSAttributedString { get set }
+	var currentFormat: String? { get set }
 	
     var formatInputChars: Set<Character>! { get }
     
@@ -128,7 +131,7 @@ extension FormattableInputInternal {
         return offset
     }
     
-	fileprivate func calculateDx(dx: inout CGFloat, format: String, formatCurrentIndex: String.Index, inputString: String, lastInputStartIndex: String.Index, inputIndex: String.Index) {
+	private func calculateDx(dx: inout CGFloat, format: String, formatCurrentIndex: String.Index, inputString: String, lastInputStartIndex: String.Index, inputIndex: String.Index) {
 		if maskAppearance.isWhole {
 			let prevInput = String(format[format.startIndex..<formatCurrentIndex])
 			let size = (prevInput as NSString).size(withAttributes: self.inputAttributes)
@@ -140,7 +143,7 @@ extension FormattableInputInternal {
 		}
 	}
 	
-	fileprivate func addMaskPlaceholder(_ newMaskPlaceholders: inout [CALayer], _ char: Character, _ maskSymbolNumber: Int, _ symbolWidth: CGFloat) {
+	private func addMaskPlaceholder(_ newMaskPlaceholders: inout [CALayer], _ char: Character, _ maskSymbolNumber: Int, _ symbolWidth: CGFloat) {
 		switch maskAppearance {
 		case .whole(let placeholders):
 			guard let inputFont = inputAttributes[NSAttributedString.Key.font] as? UIFont, let maskFont = maskAttributes[NSAttributedString.Key.font] as? UIFont else { return }
@@ -156,7 +159,26 @@ extension FormattableInputInternal {
 	}
 	
 	func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult {
-        guard let format = self.format else {
+		var result = processAttributesForTextAndMaskInternal(range: range, replacementText: replacementText, format: currentFormat)
+		if case .allowed = result {
+			return result
+		}
+		for format in formats {
+			if format == currentFormat { continue }
+			result = processAttributesForTextAndMaskInternal(range: range, replacementText: replacementText, format: format)
+			switch result {
+			case .notAllowed:
+				continue
+			default:
+				currentFormat = format
+				return result
+			}
+		}
+		return result
+	}
+	
+	private func processAttributesForTextAndMaskInternal(range: NSRange, replacementText: String, format: String?) -> ProcessAttributesResult {
+        guard let format = format else {
             return .withoutFormat
         }
         var numberOfDeletedSymbols = 0
@@ -211,8 +233,8 @@ extension FormattableInputInternal {
 				if shouldEnd || (mutableAttributedString.string.isEmpty && !maskAppearance.isWhole) {
 					break
 				}
-				// Check if current area of input string starts with a tail of previous mask area. In that case delete those characters.
-				// It is useful in situation when user pastes text with mask symbols.
+				// Check if current area of input string starts with a tail of previous mask area. If it is true then delete those characters.
+				// It is needed when user pastes text with mask symbols.
 				if allowIncrementingInputSymbolIndex {
 					if !self.formatSymbols[char]!.contains(mutableAttributedString.string[inputIndex].unicodeScalars.first!) {
 						let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
@@ -324,7 +346,7 @@ extension FormattableInputInternal {
 	}
 	
 	func processNonInputSymbolsAtTheEnd() {
-		guard let format = self.format else { return }
+		guard let format = self.currentFormat else { return }
 		var nonInputSymbolsAtTheEnd: String = ""
 		for char in format {
 			let isUserSymbol = self.formatInputChars.contains(char)
