@@ -21,7 +21,11 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 		}
 	}
 	
-	override init(frame: CGRect, textContainer: NSTextContainer?) {
+	public convenience init() {
+		self.init(frame: CGRect.zero, textContainer: nil)
+	}
+	
+	public override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		super.delegate = delegateProxy
 		self.customInit()

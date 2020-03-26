@@ -110,7 +110,11 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		}
 	}
 	
-	override init(frame: CGRect) {
+	public convenience init() {
+		self.init(frame: CGRect.zero)
+	}
+	
+	public override init(frame: CGRect) {
 		super.init(frame: frame)
 		super.delegate = delegateProxy
 		self.customInit()
