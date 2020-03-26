@@ -91,7 +91,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
         }
     }
     
-    open var formats: [String] = [] {
+    public var formats: [String] = [] {
         didSet {
 			if !oldValue.isEmpty {
                 clearText()

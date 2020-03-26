@@ -21,7 +21,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		}
 	}
 	
-	open var formats: [String] = []  {
+	public var formats: [String] = []  {
 		didSet {
 			if !oldValue.isEmpty {
 				clearText()
