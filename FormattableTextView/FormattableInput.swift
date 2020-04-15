@@ -58,6 +58,9 @@ public protocol FormattableInput: class, UITextInput {
 	
 	var maskAppearance: FormattableTextView.MaskAppearance { get set }
 	
+	/// Allow inserting space character at the beginning of the text. It is required behavior in order to use iOS smart suggestions, e.g. telephone number.
+	var allowSmartSuggestions: Bool { get set }
+	
 	/// Input symbols will be drawn with these attributes
 	var inputAttributes: [NSAttributedString.Key : Any] { get set }
 	

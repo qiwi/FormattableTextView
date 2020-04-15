@@ -64,6 +64,11 @@ final class ViewController: UIViewController {
 								"7": CharacterSet(charactersIn: "7"),
 								"w": CharacterSet.letters,
 								"*": CharacterSet(charactersIn: "").inverted]
+			if i == 2 {
+				(tv as? UITextView)?.textContentType = .telephoneNumber
+				(tv as? UITextField)?.textContentType = .telephoneNumber
+				tv.allowSmartSuggestions = true
+			}
 			tv.layer.cornerRadius = 5
 			if let superview = oldView.superview {
 				oldView.removeFromSuperview()

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @IBDesignable
-open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {	
+open class FormattableKernTextView: UITextView, FormattableInput, FormattableInputInternal {
 	
 	internal var internalAttributedText: NSAttributedString {
 		get {
@@ -65,6 +65,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
             replaceText(inRange: NSMakeRange(0, super.text.count), withText: newValue)
         }
     }
+	
+	public var allowSmartSuggestions: Bool = false
     
     private func setupFormatChars() {
         formatInputChars = Set(formatSymbols.keys)
@@ -232,10 +234,12 @@ extension FormattableKernTextView {
 		}
 		
 		func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-			let text = text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+			guard let formattableTextView = textView as? FormattableInputInternal else { fatalError() }
+			
+			if formattableTextView.allowSmartSuggestions && range.location == 0 && range.length == 0 && text == " " { return true }
+			let text = text.count == 1 ? text : text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 			let userResult = userDelegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text)
 			
-			guard let formattableTextView = textView as? FormattableInputInternal else { fatalError() }
 			let processResult = formattableTextView.processAttributesForTextAndMask(range: range, replacementText: text)
 			switch processResult {
 			case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):

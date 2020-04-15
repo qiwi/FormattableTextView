@@ -150,6 +150,8 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
         }
     }
 	
+	public var allowSmartSuggestions: Bool = false
+	
 	private func replaceText(inRange range: NSRange, withText text: String) {
 		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
 		switch result {
@@ -215,10 +217,12 @@ extension FormattableTextField {
 		}
 		
 		func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-			let text = string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+			guard let formattableTextField = textField as? FormattableInputInternal else { fatalError() }
+			
+			if formattableTextField.allowSmartSuggestions && range.location == 0 && range.length == 0 && string == " " { return true }
+			let text = string.count == 1 ? string : string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 			let userResult = userDelegate?.textField?(textField, shouldChangeCharactersIn: range, replacementString: string)
 			
-			guard let formattableTextField = textField as? FormattableInputInternal else { fatalError() }
 			let processResult = formattableTextField.processAttributesForTextAndMask(range: range, replacementText: text)
 			switch processResult {
 			case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
