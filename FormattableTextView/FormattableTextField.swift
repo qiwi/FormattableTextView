@@ -132,15 +132,6 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 		typingAttributes = inputAttributes
 	}
 	
-	private func setupFormatChars() {
-		formatInputChars = Set(formatSymbols.keys)
-	}
-	
-	private func setupMask() {
-		setupFormatChars()
-		replaceText(inRange: NSMakeRange(0, 0), withText: "")
-	}
-	
 	override open var text: String! {
         get {
             return super.text
@@ -152,7 +143,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	
 	public var allowSmartSuggestions: Bool = false
 	
-	private func replaceText(inRange range: NSRange, withText text: String) {
+	internal func replaceText(inRange range: NSRange, withText text: String) {
 		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
 		switch result {
 		case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
@@ -166,22 +157,6 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	private func clearText() {
 		if !(text?.isEmpty ?? false) {
 			text = ""
-		}
-	}
-	
-	private func setLeftInset() {
-		guard let format = currentFormat else { return }
-		var index = format.startIndex
-		for char in format {
-			if self.formatInputChars.contains(char) {
-				if index != format.startIndex {
-					let prevFormat = String(format[format.startIndex..<index])
-					let width = (prevFormat as NSString).size(withAttributes: self.maskAttributes).width
-					self.internalInsetX = width
-				}
-				break
-			}
-			index = format.index(after: index)
 		}
 	}
 	

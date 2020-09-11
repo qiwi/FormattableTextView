@@ -68,11 +68,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 	
 	public var allowSmartSuggestions: Bool = false
     
-    private func setupFormatChars() {
-        formatInputChars = Set(formatSymbols.keys)
-    }
-    
-    private func replaceText(inRange range: NSRange, withText text: String) {
+	internal func replaceText(inRange range: NSRange, withText text: String) {
 		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)
 		switch result {
 		case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
@@ -81,11 +77,6 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 			break
 		}
 	}
-    
-    private func setupMask() {
-        setupFormatChars()
-        replaceText(inRange: NSMakeRange(0, 0), withText: "")
-    }
     
     private func clearText() {
         if !text.isEmpty {
@@ -125,22 +116,6 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 	
 	internal var maskPlaceholders = [CALayer]()
 	internal var nonInputSymbolsAtTheEnd: String?
-    
-    private func setLeftInset() {
-        guard let format = currentFormat else { return }
-        var index = format.startIndex
-        for char in format {
-            if self.formatInputChars.contains(char) {
-                if index != format.startIndex {
-                    let prevFormat = String(format[format.startIndex..<index])
-                    let width = (prevFormat as NSString).size(withAttributes: self.maskAttributes).width
-                    internalInsetX = width
-                }
-                break
-            }
-            index = format.index(after: index)
-        }
-    }
 	
 	public var insetX: CGFloat = 5 {
 		didSet {

@@ -80,7 +80,7 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
     var internalAttributedText: NSAttributedString { get set }
 	var currentFormat: String? { get set }
 	
-    var formatInputChars: Set<Character>! { get }
+    var formatInputChars: Set<Character>! { get set }
     
     /// Non-input elements of format which will be drawn in separate layers
     var maskLayers: [Int: CALayer] { get set }
@@ -97,6 +97,10 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	var nonInputSymbolsAtTheEnd: String? { get set }
     
     func updateInsetY()
+	func setLeftInset()
+	func setupMask()
+	func replaceText(inRange range: NSRange, withText text: String)
+	func setupFormatChars()
     func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult
     func setAttributedTextAndTextPosition(attributedString: NSAttributedString, location: Int, offset: Int, maskLayersDiff: MaskLayersDiff)
 }
@@ -158,6 +162,31 @@ extension FormattableInputInternal {
 			}
 		default:
 			break
+		}
+	}
+	
+	func setupMask() {
+		setupFormatChars()
+		replaceText(inRange: NSMakeRange(0, 0), withText: "")
+	}
+	
+	func setupFormatChars() {
+		formatInputChars = Set(formatSymbols.keys)
+	}
+	
+	func setLeftInset() {
+		guard let format = currentFormat else { return }
+		var index = format.startIndex
+		for char in format {
+			if self.formatInputChars.contains(char) {
+				if index != format.startIndex {
+					let prevFormat = String(format[format.startIndex..<index])
+					let width = (prevFormat as NSString).size(withAttributes: self.maskAttributes).width
+					self.internalInsetX = width
+				}
+				break
+			}
+			index = format.index(after: index)
 		}
 	}
 	
