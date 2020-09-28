@@ -366,9 +366,11 @@ extension FormattableInputInternal {
         }
 		CATransaction.commit()
         
-        if let pos = self.position(from: self.beginningOfDocument, offset: location+offset) {
-            self.selectedTextRange = self.textRange(from: pos, to: pos)
-        }
+		DispatchQueue.main.async { // this async call fixes the cursor position when you try to insert large text
+			if let pos = self.position(from: self.beginningOfDocument, offset: location+offset) {
+				self.selectedTextRange = self.textRange(from: pos, to: pos)
+			}
+		}
     }
 	
 	func updateInsetY() {
