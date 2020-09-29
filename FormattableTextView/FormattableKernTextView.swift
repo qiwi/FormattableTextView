@@ -207,11 +207,10 @@ extension FormattableKernTextView {
 				return super.forwardingTarget(for: aSelector)
 			}
 		}
-		
-		func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 			guard let formattableTextView = textView as? FormattableInputInternal else { fatalError() }
-			
-			if formattableTextView.allowSmartSuggestions && range.location == 0 && range.length == 0 && text == " " { return true }
+            
 			let text = text.count == 1 ? text : text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 			let userResult = userDelegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text)
 			
@@ -228,9 +227,10 @@ extension FormattableKernTextView {
 				if let userDelegate = userDelegate, userDelegate.responds(to: #selector(UITextViewDelegate.textViewDidChange(_:))) {
 					userDelegate.textViewDidChange?(textView)
 				}
-                if range.location == 0 && range.length == 0 && text.isEmpty { return true }
+                if formattableTextView.shouldAllowSmartSuggestion(range, text) { return true }
 				return false
 			case .notAllowed:
+                if formattableTextView.shouldAllowSmartSuggestion(range, text) { return true }
 				return false
 			case .withoutFormat:
 				return userResult ?? true

@@ -194,7 +194,6 @@ extension FormattableTextField {
 		func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 			guard let formattableTextField = textField as? FormattableInputInternal else { fatalError() }
 			
-			if formattableTextField.allowSmartSuggestions && range.location == 0 && range.length == 0 && string == " " { return true }
 			let text = string.count == 1 ? string : string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
 			let userResult = userDelegate?.textField?(textField, shouldChangeCharactersIn: range, replacementString: string)
 			
@@ -210,9 +209,10 @@ extension FormattableTextField {
 					formattableTextField.setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
 					textField.sendActions(for: .editingChanged)
 				}
-                if range.location == 0 && range.length == 0 && text.isEmpty { return true }
+                if formattableTextField.shouldAllowSmartSuggestion(range, text) { return true }
 				return false
 			case .notAllowed:
+                if formattableTextField.shouldAllowSmartSuggestion(range, text) { return true }
 				return false
 			case .withoutFormat:
 				return userResult ?? true

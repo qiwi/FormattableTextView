@@ -30,7 +30,7 @@ final class ViewController: UIViewController {
 	let formats = [
 		["dddd dddd dddd dddd"],
 		["wdddww dd"],
-		["+7(ddd)ddd-dd-dd",
+		["+7 (ddd) ddd-dd-dd",
 		"+44 07ddd dddddd"],
 		["dddddd ₽"]
 	]

@@ -96,6 +96,7 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	
 	var nonInputSymbolsAtTheEnd: String? { get set }
     
+    func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool
     func updateInsetY()
 	func setLeftInset()
 	func setupMask()
@@ -106,6 +107,10 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 }
 
 extension FormattableInputInternal {
+    
+    func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool {
+        return self.allowSmartSuggestions && range.location == 0 && range.length == 0 && text.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty
+    }
     
     private func getOrCreateCurrentLayer(maskLayers: [Int: CALayer], maskAttributes: [NSAttributedString.Key: Any], key: Int, prevFormat: String) -> (action: ActionForLayer, layer: CALayer) {
         if let layer = maskLayers[key] {
