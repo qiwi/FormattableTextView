@@ -228,6 +228,7 @@ extension FormattableKernTextView {
 				if let userDelegate = userDelegate, userDelegate.responds(to: #selector(UITextViewDelegate.textViewDidChange(_:))) {
 					userDelegate.textViewDidChange?(textView)
 				}
+                if range.location == 0 && range.length == 0 && text.isEmpty { return true }
 				return false
 			case .notAllowed:
 				return false
