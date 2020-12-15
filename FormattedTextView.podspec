@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.platform = :ios
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.name = 'FormattableTextView'
   s.summary = 'Framework which allows you to format user input according to your mask'
   s.requires_arc = true
