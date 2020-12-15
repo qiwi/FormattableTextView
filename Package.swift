@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "FormattableTextView",
     platforms: [
-            .iOS(.v8),
+            .iOS(.v9),
         ],
     products: [
         // The external product of our package is an importable
