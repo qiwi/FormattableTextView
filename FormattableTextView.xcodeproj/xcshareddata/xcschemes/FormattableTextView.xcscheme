@@ -28,9 +28,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7C9A74552657E8CD00C1FF52"
+               BuildableName = "FormattableTextViewTests.xctest"
+               BlueprintName = "FormattableTextViewTests"
+               ReferencedContainer = "container:FormattableTextView.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -51,8 +59,6 @@
             ReferencedContainer = "container:FormattableTextView.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

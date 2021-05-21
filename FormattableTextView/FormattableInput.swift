@@ -30,28 +30,28 @@ public enum MaskAppearance {
 }
 
 internal enum MaskState {
-    case mask
-    case input
+	case mask
+	case input
 }
 
 internal struct MaskLayersDiff {
-    var layersToAdd: [Int: CALayer]
-    var layersToDelete: [Int]
-    var layersToChangeFrames: [Int: CGPoint]
+	var layersToAdd: [Int: CALayer]
+	var layersToDelete: [Int]
+	var layersToChangeFrames: [Int: CGPoint]
 }
 
 internal enum ActionForLayer {
-    case change
-    case add
+	case change
+	case add
 }
 
 internal enum ProcessAttributesResult {
-    case withoutFormat
-    case notAllowed
-    case allowed(attributedString: NSAttributedString, numberOfDeletedSymbols: Int, maskLayersDiff: MaskLayersDiff)
+	case withoutFormat
+	case notAllowed
+	case allowed(attributedString: NSAttributedString, numberOfDeletedSymbols: Int, maskLayersDiff: MaskLayersDiff)
 }
 
-public protocol FormattableInput: class, UITextInput {
+public protocol FormattableInput: AnyObject, UITextInput {
 	var currentFormat: String? { get }
 	
 	var formats: [String] { get set }
@@ -74,19 +74,21 @@ public protocol FormattableInput: class, UITextInput {
 	var insetX: CGFloat { get set }
 	
 	var keyboardType: UIKeyboardType { get set }
+	
+	var formattedText: String? { get }
 }
 
 internal protocol FormattableInputInternal: FormattableInput where Self: UIView {
-    var internalAttributedText: NSAttributedString { get set }
+	var internalAttributedText: NSAttributedString { get set }
 	var currentFormat: String? { get set }
 	
-    var formatInputChars: Set<Character>! { get set }
-    
-    /// Non-input elements of format which will be drawn in separate layers
-    var maskLayers: [Int: CALayer] { get set }
+	var formatInputChars: Set<Character>! { get set }
+	
+	/// Non-input elements of format which will be drawn in separate layers
+	var maskLayers: [Int: CALayer] { get set }
 	var maskPlaceholders: [CALayer] { get set }
 
-    var backgroundColor: UIColor? { get }
+	var backgroundColor: UIColor? { get }
 	
 	/// real x inset for input text
 	var internalInsetX: CGFloat { get set }
@@ -95,54 +97,54 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	var internalInsetY: CGFloat { get set }
 	
 	var nonInputSymbolsAtTheEnd: String? { get set }
-    
-    func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool
-    func updateInsetY()
+	
+	func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool
+	func updateInsetY()
 	func setLeftInset()
 	func setupMask()
 	func replaceText(inRange range: NSRange, withText text: String)
 	func setupFormatChars()
-    func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult
-    func setAttributedTextAndTextPosition(attributedString: NSAttributedString, location: Int, offset: Int, maskLayersDiff: MaskLayersDiff)
+	func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult
+	func setAttributedTextAndTextPosition(attributedString: NSAttributedString, location: Int, offset: Int, maskLayersDiff: MaskLayersDiff)
 }
 
 extension FormattableInputInternal {
-    
-    func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool {
-        return self.allowSmartSuggestions && range.location == 0 && range.length == 0 && text.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty
-    }
-    
-    private func getOrCreateCurrentLayer(maskLayers: [Int: CALayer], maskAttributes: [NSAttributedString.Key: Any], key: Int, prevFormat: String) -> (action: ActionForLayer, layer: CALayer) {
-        if let layer = maskLayers[key] {
-            return (action: .change, layer: layer)
-        } else {
+	
+	func shouldAllowSmartSuggestion(_ range: NSRange, _ text: String) -> Bool {
+		return self.allowSmartSuggestions && range.location == 0 && range.length == 0 && text.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty
+	}
+	
+	private func getOrCreateCurrentLayer(maskLayers: [Int: CALayer], maskAttributes: [NSAttributedString.Key: Any], key: Int, prevFormat: String) -> (action: ActionForLayer, layer: CALayer) {
+		if let layer = maskLayers[key] {
+			return (action: .change, layer: layer)
+		} else {
 			let layer = CALayer(text: prevFormat, attributes: maskAttributes)
-            return (action: .add, layer: layer)
-        }
-    }
+			return (action: .add, layer: layer)
+		}
+	}
 	
 	@discardableResult
-    private func fillMaskLayersDiffAndIncrementDx(maskLayersDiff: inout MaskLayersDiff, maskLayers: [Int: CALayer], key: Int, prevFormat: String, dx: inout CGFloat) -> CGFloat {
-        let currentLayerResult = getOrCreateCurrentLayer(maskLayers: maskLayers, maskAttributes: maskAttributes, key: key, prevFormat: prevFormat)
-        let layer = currentLayerResult.layer
+	private func fillMaskLayersDiffAndIncrementDx(maskLayersDiff: inout MaskLayersDiff, maskLayers: [Int: CALayer], key: Int, prevFormat: String, dx: inout CGFloat) -> CGFloat {
+		let currentLayerResult = getOrCreateCurrentLayer(maskLayers: maskLayers, maskAttributes: maskAttributes, key: key, prevFormat: prevFormat)
+		let layer = currentLayerResult.layer
 		guard let inputFont = inputAttributes[NSAttributedString.Key.font] as? UIFont, let maskFont = maskAttributes[NSAttributedString.Key.font] as? UIFont else { return 0 }
 		let dy = internalInsetY.rounded() - (maskFont.lineHeight-inputFont.lineHeight)/2
-        switch currentLayerResult.action {
-        case .add:
-            layer.frame.origin.x = dx
-            layer.frame.origin.y = dy
-            maskLayersDiff.layersToAdd[key] = layer
-        case .change:
-            var position = layer.frame.origin
-            position.x = dx
-            position.y = dy
-            maskLayersDiff.layersToChangeFrames[key] = position
-        }
-        let offset = layer.bounds.width
-        dx += offset
-        return offset
-    }
-    
+		switch currentLayerResult.action {
+		case .add:
+			layer.frame.origin.x = dx
+			layer.frame.origin.y = dy
+			maskLayersDiff.layersToAdd[key] = layer
+		case .change:
+			var position = layer.frame.origin
+			position.x = dx
+			position.y = dy
+			maskLayersDiff.layersToChangeFrames[key] = position
+		}
+		let offset = layer.bounds.width
+		dx += offset
+		return offset
+	}
+	
 	private func calculateDx(dx: inout CGFloat, format: String, formatCurrentIndex: String.Index, inputString: String, lastInputStartIndex: String.Index, inputIndex: String.Index) {
 		if maskAppearance.isWhole {
 			let prevInput = String(format[format.startIndex..<formatCurrentIndex])
@@ -215,58 +217,58 @@ extension FormattableInputInternal {
 	}
 	
 	private func processAttributesForTextAndMaskInternal(range: NSRange, replacementText: String, format: String?) -> ProcessAttributesResult {
-        guard let format = format else {
-            return .withoutFormat
-        }
-        var numberOfDeletedSymbols = 0
-        var state = MaskState.mask
-        var formatCurrentStartIndex = format.startIndex
-        
-        let mutableAttributedString = NSMutableAttributedString(string: (self.internalAttributedText.string as NSString).replacingCharacters(in: range, with: replacementText), attributes: self.inputAttributes)
-        var inputSymbolNumber = 0
+		guard let format = format else {
+			return .withoutFormat
+		}
+		var numberOfDeletedSymbols = 0
+		var state = MaskState.mask
+		var formatCurrentStartIndex = format.startIndex
+		
+		let mutableAttributedString = NSMutableAttributedString(string: (self.internalAttributedText.string as NSString).replacingCharacters(in: range, with: replacementText), attributes: self.inputAttributes)
+		var inputSymbolNumber = 0
 		var maskSymbolNumber = 0
-        var inputIndex = mutableAttributedString.string.startIndex
-        var formatCurrentIndex = format.startIndex
-        var lastInputStartIndex = format.startIndex
-        let maskLayers = self.maskLayers
-        var dx: CGFloat = self.insetX
-        var isFirstInputSymbol = true
+		var inputIndex = mutableAttributedString.string.startIndex
+		var formatCurrentIndex = format.startIndex
+		var lastInputStartIndex = format.startIndex
+		let maskLayers = self.maskLayers
+		var dx: CGFloat = self.insetX
+		var isFirstInputSymbol = true
 		var shouldEnd = false
-        var maskLayersDiff = MaskLayersDiff(layersToAdd: [Int: CALayer](), layersToDelete: [Int](), layersToChangeFrames: [Int: CGPoint]())
+		var maskLayersDiff = MaskLayersDiff(layersToAdd: [Int: CALayer](), layersToDelete: [Int](), layersToChangeFrames: [Int: CGPoint]())
 		let symbolWidth = format.isEmpty ? 0 : (String(format.first!) as NSString).size(withAttributes: inputAttributes).width
 		var newMaskPlaceholders = [CALayer]()
-        updateInsetY()
-        
-        for char in format {
-            var allowIncrementingInputSymbolIndex = (inputIndex != mutableAttributedString.string.endIndex)
+		updateInsetY()
+		
+		for char in format {
+			var allowIncrementingInputSymbolIndex = (inputIndex != mutableAttributedString.string.endIndex)
 			let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
-            let isUserSymbol = self.formatInputChars.contains(char)
-            
-            if state == .mask && isUserSymbol {
-                state = .input
-                lastInputStartIndex = inputIndex
-                
-                if isFirstInputSymbol {
-                    isFirstInputSymbol = false
-                    if !prevFormat.isEmpty {
-                        fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
-                    }
-                } else {
-                    let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
+			let isUserSymbol = self.formatInputChars.contains(char)
+			
+			if state == .mask && isUserSymbol {
+				state = .input
+				lastInputStartIndex = inputIndex
+				
+				if isFirstInputSymbol {
+					isFirstInputSymbol = false
+					if !prevFormat.isEmpty {
+						fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
+					}
+				} else {
+					let width = fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentStartIndex.utf16Offset(in: format), prevFormat: prevFormat, dx: &dx)
 					if (maskAppearance.isWhole && allowIncrementingInputSymbolIndex || !maskAppearance.isWhole) && !mutableAttributedString.string.isEmpty {
 						mutableAttributedString.addAttribute(NSAttributedString.Key.kern, value: width, range: NSMakeRange(inputSymbolNumber-1, 1))
 					}
-                }
+				}
 				if shouldEnd {
 					break
 				}
-            } else if state == .input && !isUserSymbol {
-                state = .mask
+			} else if state == .input && !isUserSymbol {
+				state = .mask
 				calculateDx(dx: &dx, format: format, formatCurrentIndex: formatCurrentIndex, inputString: mutableAttributedString.string, lastInputStartIndex: lastInputStartIndex, inputIndex: inputIndex)
-                formatCurrentStartIndex = formatCurrentIndex
-            }
-            
-            if state == .input {
+				formatCurrentStartIndex = formatCurrentIndex
+			}
+			
+			if state == .input {
 				if shouldEnd || (mutableAttributedString.string.isEmpty && !maskAppearance.isWhole) {
 					break
 				}
@@ -301,7 +303,7 @@ extension FormattableInputInternal {
 				if maskAppearance.isWhole && !allowIncrementingInputSymbolIndex {
 					addMaskPlaceholder(&newMaskPlaceholders, char, maskSymbolNumber, symbolWidth)
 				}
-            }
+			}
 			if inputIndex == mutableAttributedString.string.endIndex && !mutableAttributedString.string.isEmpty && !shouldEnd {
 				var shouldBreak = false
 				switch maskAppearance {
@@ -316,13 +318,13 @@ extension FormattableInputInternal {
 					break // exit from loop
 				}
 			}
-            formatCurrentIndex = format.index(after: formatCurrentIndex)
+			formatCurrentIndex = format.index(after: formatCurrentIndex)
 			maskSymbolNumber += 1
-        }
-        // A condition which prevents user from inserting too many symbols
-        if inputIndex < mutableAttributedString.string.endIndex {
-            return .notAllowed
-        }
+		}
+		// A condition which prevents user from inserting too many symbols
+		if inputIndex < mutableAttributedString.string.endIndex {
+			return .notAllowed
+		}
 		
 		maskPlaceholders.forEach { $0.removeFromSuperlayer() }
 		newMaskPlaceholders.forEach {
@@ -338,7 +340,7 @@ extension FormattableInputInternal {
 			case .leftAndRight:
 				shouldCalculateDx = state == .input
 			case .whole(_):
-				shouldCalculateDx = false			
+				shouldCalculateDx = false
 			}
 			if shouldCalculateDx {
 				calculateDx(dx: &dx, format: format, formatCurrentIndex: formatCurrentIndex, inputString: mutableAttributedString.string, lastInputStartIndex: lastInputStartIndex, inputIndex: inputIndex)
@@ -346,37 +348,37 @@ extension FormattableInputInternal {
 			fillMaskLayersDiffAndIncrementDx(maskLayersDiff: &maskLayersDiff, maskLayers: maskLayers, key: formatCurrentIndex.utf16Offset(in: format), prevFormat: nonInputSymbolsAtTheEnd, dx: &dx)
 		}
 		
-        let indicesToAdd = Set(maskLayersDiff.layersToAdd.map { $0.key })
-        let indicesToChange = Set(maskLayersDiff.layersToChangeFrames.map { $0.key })
-        maskLayersDiff.layersToDelete = self.maskLayers.map { $0.key }.filter { !indicesToAdd.contains($0) && !indicesToChange.contains($0) }
-        
-        return .allowed(attributedString: mutableAttributedString, numberOfDeletedSymbols: numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
-    }
-    
-    func setAttributedTextAndTextPosition(attributedString: NSAttributedString, location: Int, offset: Int, maskLayersDiff: MaskLayersDiff) {
-        self.internalAttributedText = attributedString
-        for key in maskLayersDiff.layersToDelete {
-            let layer = self.maskLayers.removeValue(forKey: key)
-            layer?.removeFromSuperlayer()
-        }
-        for (key, value) in maskLayersDiff.layersToAdd {
-            self.maskLayers[key] = value
-            self.layer.addSublayer(value)
-        }
+		let indicesToAdd = Set(maskLayersDiff.layersToAdd.map { $0.key })
+		let indicesToChange = Set(maskLayersDiff.layersToChangeFrames.map { $0.key })
+		maskLayersDiff.layersToDelete = self.maskLayers.map { $0.key }.filter { !indicesToAdd.contains($0) && !indicesToChange.contains($0) }
+		
+		return .allowed(attributedString: mutableAttributedString, numberOfDeletedSymbols: numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+	}
+	
+	func setAttributedTextAndTextPosition(attributedString: NSAttributedString, location: Int, offset: Int, maskLayersDiff: MaskLayersDiff) {
+		self.internalAttributedText = attributedString
+		for key in maskLayersDiff.layersToDelete {
+			let layer = self.maskLayers.removeValue(forKey: key)
+			layer?.removeFromSuperlayer()
+		}
+		for (key, value) in maskLayersDiff.layersToAdd {
+			self.maskLayers[key] = value
+			self.layer.addSublayer(value)
+		}
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
-        for (key, value) in maskLayersDiff.layersToChangeFrames {
-            let layer = self.maskLayers[key]
-            layer?.frame.origin = value
-        }
+		for (key, value) in maskLayersDiff.layersToChangeFrames {
+			let layer = self.maskLayers[key]
+			layer?.frame.origin = value
+		}
 		CATransaction.commit()
-        
+		
 		DispatchQueue.main.async { // this async call fixes the cursor position when you try to insert large text
 			if let pos = self.position(from: self.beginningOfDocument, offset: location+offset) {
 				self.selectedTextRange = self.textRange(from: pos, to: pos)
 			}
 		}
-    }
+	}
 	
 	func updateInsetY() {
 		if let inputFont = self.inputAttributes[NSAttributedString.Key.font] as? UIFont {
@@ -396,5 +398,34 @@ extension FormattableInputInternal {
 			}
 		}
 		self.nonInputSymbolsAtTheEnd = nonInputSymbolsAtTheEnd
+	}
+}
+
+public extension FormattableInput {
+	var formattedText: String? {
+		get {
+			guard let currentFormat = currentFormat else {
+				return nil
+			}
+			var text = text(in: textRange(from: self.beginningOfDocument, to: self.endOfDocument) ?? UITextRange()) ?? ""
+			var result = ""
+			for (index, char) in currentFormat.enumerated() {
+				if formatSymbols.keys.contains(char) {
+					if text.isEmpty {
+						break
+					} else {
+						result.append(text[text.startIndex])
+						text.remove(at: text.startIndex)
+						if text.isEmpty {
+							break
+						}
+					}
+				} else {
+					let currentIndex = currentFormat.index(result.startIndex, offsetBy: index)
+					result.append(currentFormat[currentIndex])
+				}
+			}
+			return result
+		}
 	}
 }

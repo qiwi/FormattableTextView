@@ -12,6 +12,8 @@
 		7C4C62752109FAFA0097A2E9 /* FormattableTextView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7C4C626D2109FAFA0097A2E9 /* FormattableTextView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7C4C627A2109FB460097A2E9 /* FormattableKernTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBF79C320F54B1C009290C7 /* FormattableKernTextView.swift */; };
 		7C4C627B2109FB460097A2E9 /* FormattableInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB60E3F2103CC0B009D00DD /* FormattableInput.swift */; };
+		7C9A74592657E8CD00C1FF52 /* FormattableTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9A74582657E8CD00C1FF52 /* FormattableTextTests.swift */; };
+		7C9A745B2657E8CD00C1FF52 /* FormattableTextView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C4C626D2109FAFA0097A2E9 /* FormattableTextView.framework */; };
 		7CBF79B220F54719009290C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBF79B120F54719009290C7 /* AppDelegate.swift */; };
 		7CBF79B420F54719009290C7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBF79B320F54719009290C7 /* ViewController.swift */; };
 		7CBF79B720F54719009290C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CBF79B520F54719009290C7 /* Main.storyboard */; };
@@ -23,6 +25,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		7C4C62722109FAFA0097A2E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7CBF79A620F54719009290C7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C4C626C2109FAFA0097A2E9;
+			remoteInfo = FormattableTextView;
+		};
+		7C9A745C2657E8CD00C1FF52 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7CBF79A620F54719009290C7 /* Project object */;
 			proxyType = 1;
@@ -49,6 +58,9 @@
 		7C4C626D2109FAFA0097A2E9 /* FormattableTextView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FormattableTextView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C4C626F2109FAFA0097A2E9 /* FormattableTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormattableTextView.h; sourceTree = "<group>"; };
 		7C4C62702109FAFA0097A2E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C9A74562657E8CD00C1FF52 /* FormattableTextViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FormattableTextViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C9A74582657E8CD00C1FF52 /* FormattableTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattableTextTests.swift; sourceTree = "<group>"; };
+		7C9A745A2657E8CD00C1FF52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CB60E3F2103CC0B009D00DD /* FormattableInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattableInput.swift; sourceTree = "<group>"; };
 		7CBF79AE20F54719009290C7 /* FormattableTextViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FormattableTextViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CBF79B120F54719009290C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +79,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C9A74532657E8CD00C1FF52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9A745B2657E8CD00C1FF52 /* FormattableTextView.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,11 +114,21 @@
 			path = FormattableTextView;
 			sourceTree = "<group>";
 		};
+		7C9A74572657E8CD00C1FF52 /* FormattableTextViewTests */ = {
+			isa = PBXGroup;
+			children = (
+				7C9A74582657E8CD00C1FF52 /* FormattableTextTests.swift */,
+				7C9A745A2657E8CD00C1FF52 /* Info.plist */,
+			);
+			path = FormattableTextViewTests;
+			sourceTree = "<group>";
+		};
 		7CBF79A520F54719009290C7 = {
 			isa = PBXGroup;
 			children = (
 				7CBF79B020F54719009290C7 /* FormattableTextViewExample */,
 				7C4C626E2109FAFA0097A2E9 /* FormattableTextView */,
+				7C9A74572657E8CD00C1FF52 /* FormattableTextViewTests */,
 				7CBF79AF20F54719009290C7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -108,6 +138,7 @@
 			children = (
 				7CBF79AE20F54719009290C7 /* FormattableTextViewExample.app */,
 				7C4C626D2109FAFA0097A2E9 /* FormattableTextView.framework */,
+				7C9A74562657E8CD00C1FF52 /* FormattableTextViewTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,6 +188,24 @@
 			productReference = 7C4C626D2109FAFA0097A2E9 /* FormattableTextView.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		7C9A74552657E8CD00C1FF52 /* FormattableTextViewTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7C9A74602657E8CD00C1FF52 /* Build configuration list for PBXNativeTarget "FormattableTextViewTests" */;
+			buildPhases = (
+				7C9A74522657E8CD00C1FF52 /* Sources */,
+				7C9A74532657E8CD00C1FF52 /* Frameworks */,
+				7C9A74542657E8CD00C1FF52 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7C9A745D2657E8CD00C1FF52 /* PBXTargetDependency */,
+			);
+			name = FormattableTextViewTests;
+			productName = FormattableTextViewTests;
+			productReference = 7C9A74562657E8CD00C1FF52 /* FormattableTextViewTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		7CBF79AD20F54719009290C7 /* FormattableTextViewExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7CBF79C020F5471C009290C7 /* Build configuration list for PBXNativeTarget "FormattableTextViewExample" */;
@@ -182,13 +231,16 @@
 		7CBF79A620F54719009290C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Михаил Мотыженков";
 				TargetAttributes = {
 					7C4C626C2109FAFA0097A2E9 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
+					};
+					7C9A74552657E8CD00C1FF52 = {
+						CreatedOnToolsVersion = 12.5;
 					};
 					7CBF79AD20F54719009290C7 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -211,12 +263,20 @@
 			targets = (
 				7CBF79AD20F54719009290C7 /* FormattableTextViewExample */,
 				7C4C626C2109FAFA0097A2E9 /* FormattableTextView */,
+				7C9A74552657E8CD00C1FF52 /* FormattableTextViewTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7C4C626B2109FAFA0097A2E9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C9A74542657E8CD00C1FF52 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -247,6 +307,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7C9A74522657E8CD00C1FF52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C9A74592657E8CD00C1FF52 /* FormattableTextTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7CBF79AA20F54719009290C7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -263,6 +331,11 @@
 			isa = PBXTargetDependency;
 			target = 7C4C626C2109FAFA0097A2E9 /* FormattableTextView */;
 			targetProxy = 7C4C62722109FAFA0097A2E9 /* PBXContainerItemProxy */;
+		};
+		7C9A745D2657E8CD00C1FF52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C4C626C2109FAFA0097A2E9 /* FormattableTextView */;
+			targetProxy = 7C9A745C2657E8CD00C1FF52 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -345,6 +418,47 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7C9A745E2657E8CD00C1FF52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FormattableTextViewTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qiwi.FormattableTextViewTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7C9A745F2657E8CD00C1FF52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = FormattableTextViewTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qiwi.FormattableTextViewTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -512,6 +626,15 @@
 			buildConfigurations = (
 				7C4C62772109FAFA0097A2E9 /* Debug */,
 				7C4C62782109FAFA0097A2E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7C9A74602657E8CD00C1FF52 /* Build configuration list for PBXNativeTarget "FormattableTextViewTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7C9A745E2657E8CD00C1FF52 /* Debug */,
+				7C9A745F2657E8CD00C1FF52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
