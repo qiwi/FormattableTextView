@@ -179,6 +179,7 @@ extension FormattableInputInternal {
 	
 	func setupFormatChars() {
 		formatInputChars = Set(formatSymbols.keys)
+		processNonInputSymbolsAtTheEnd()
 	}
 	
 	func setLeftInset() {
