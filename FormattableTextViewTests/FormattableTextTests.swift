@@ -29,13 +29,33 @@ class FormattableTextTests: XCTestCase {
 		XCTAssertEqual(result, "123-456")
 	}
 	
-	func testLongFormat() throws {
+	func testLongFormatLeftOnly() throws {
 		let tv = FormattableKernTextView()
 		tv.formats = ["w*45d-_*asdf"]
 		tv.text = "t(9"
 		
 		let result = tv.formattedText
 		XCTAssertEqual(result, "t(459")
+	}
+	
+	func testLongFormatLeftAndRight() throws {
+		let tv = FormattableKernTextView()
+		tv.formats = ["w*45d-_*asdf"]
+		tv.text = "t(9"
+		tv.maskAppearance = .leftAndRight
+		
+		let result = tv.formattedText
+		XCTAssertEqual(result, "t(459-_")
+	}
+	
+	func testLongFormatWhole() throws {
+		let tv = FormattableKernTextView()
+		tv.formats = ["w*45d-_*asdf"]
+		tv.text = "t(9"
+		tv.maskAppearance = .whole(placeholders: [:])
+		
+		let result = tv.formattedText
+		XCTAssertEqual(result, "t(459-_*asdf")
 	}
 
 }

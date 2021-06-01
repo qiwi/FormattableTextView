@@ -410,14 +410,27 @@ public extension FormattableInput {
 			}
 			var text = text(in: textRange(from: self.beginningOfDocument, to: self.endOfDocument) ?? UITextRange()) ?? ""
 			var result = ""
+			
+			var shouldBreakLoopForLeftAndRight = false
+			var isWholeEnding = false
 			for (index, char) in currentFormat.enumerated() {
-				if formatSymbols.keys.contains(char) {
-					if text.isEmpty {
+				if formatSymbols.keys.contains(char) && !isWholeEnding {
+					if shouldBreakLoopForLeftAndRight || text.isEmpty {
 						break
-					} else {
-						result.append(text[text.startIndex])
-						text.remove(at: text.startIndex)
-						if text.isEmpty {
+					}
+					result.append(text[text.startIndex])
+					text.remove(at: text.startIndex)
+					if text.isEmpty {
+						var shouldBreakLoop = false
+						switch self.maskAppearance {
+						case .leftOnly:
+							shouldBreakLoop = true
+						case .leftAndRight:
+							shouldBreakLoopForLeftAndRight = true
+						case .whole:
+							isWholeEnding = true
+						}
+						if shouldBreakLoop {
 							break
 						}
 					}
