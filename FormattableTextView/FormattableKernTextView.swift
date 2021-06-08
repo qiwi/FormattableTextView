@@ -73,6 +73,8 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 		switch result {
 		case .allowed(let attributedString, let numberOfDeletedSymbols, let maskLayersDiff):
 			setAttributedTextAndTextPosition(attributedString: attributedString, location: range.location, offset: text.count-numberOfDeletedSymbols, maskLayersDiff: maskLayersDiff)
+        case .withoutFormat:
+            super.text = (super.text as NSString?)?.replacingCharacters(in: range, with: text)
 		default:
 			break
 		}
