@@ -58,11 +58,11 @@ class FormattableTextTests: XCTestCase {
 		XCTAssertEqual(result, "t(459-_*asdf")
 	}
 
-    func testNonFormattedTextInTextView() throws {
-        let tv = FormattableKernTextView()
-        tv.text = "non-formatted text"
+	func testNonFormattedTextInTextView() throws {
+		let tv = FormattableKernTextView()
+		tv.text = "non-formatted text"
 
-        let result = tv.formattedText
-        XCTAssertEqual(result, "non-formatted text")
-    }
+		let result = tv.formattedText
+		XCTAssertEqual(result, "non-formatted text")
+	}
 }
