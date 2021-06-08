@@ -406,9 +406,9 @@ public extension FormattableInput {
 	var formattedText: String? {
 		get {
 			var text = text(in: textRange(from: self.beginningOfDocument, to: self.endOfDocument) ?? UITextRange()) ?? ""
-            guard let currentFormat = currentFormat else {
-                return text
-            }
+			guard let currentFormat = currentFormat else {
+				return text
+			}
 
 			var result = ""
 			
