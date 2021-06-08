@@ -51,7 +51,7 @@ internal enum ProcessAttributesResult {
 	case allowed(attributedString: NSAttributedString, numberOfDeletedSymbols: Int, maskLayersDiff: MaskLayersDiff)
 }
 
-public protocol FormattableInput: AnyObject, UITextInput {
+public protocol FormattableInput: UITextInput {
 	var currentFormat: String? { get }
 	
 	var formats: [String] { get set }
