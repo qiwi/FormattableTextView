@@ -65,4 +65,12 @@ class FormattableTextTests: XCTestCase {
         let result = tv.formattedText
         XCTAssertEqual(result, "non-formatted text")
     }
+
+    func testNonFormattedTextInTextField() throws {
+        let tv = FormattableTextField()
+        tv.text = "non-formatted text"
+
+        let result = tv.formattedText
+        XCTAssertEqual(result, "non-formatted text")
+    }
 }
