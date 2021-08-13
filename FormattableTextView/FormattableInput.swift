@@ -14,6 +14,7 @@ import UIKit
 /// - leftOnly: draw mask elements from the left side of inputed symbols
 /// - leftAndRight: draw mask elements from the left side of inputed symbols and draw next mask element from the right side if current input area is finished
 /// - whole: draw all mask elements; in this case it is your responsibility to set the same *monospaced* font in maskAttributes and inputAttributes
+@frozen
 public enum MaskAppearance {
 	case leftOnly
 	case leftAndRight
