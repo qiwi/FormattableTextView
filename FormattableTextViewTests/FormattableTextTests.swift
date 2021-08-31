@@ -55,7 +55,6 @@ class FormattableTextTests: XCTestCase {
 		tv.formats = ["w*45d-_*asdf"]
 		tv.text = "t(9"
 		tv.maskAppearance = .whole(placeholders: [:])
-		tv.includeNonInputSymbolsAtTheEnd = false
 		
 		let result = tv.formattedText
 		XCTAssertEqual(result, "t(459-_*asdf")
@@ -77,7 +76,7 @@ class FormattableTextTests: XCTestCase {
 		XCTAssertEqual(result, "non-formatted text")
 	}
 	
-	func testFormattedText() {
+	func testFormattedTextWithCurrency() {
 		let tv = FormattableTextField()
 		tv.formats = ["dddddddd $"]
 		tv.inputAttributes = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.black]

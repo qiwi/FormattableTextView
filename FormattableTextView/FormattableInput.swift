@@ -425,10 +425,10 @@ extension FormattableInputInternal {
 		var formatCurrentStartIndex = format.startIndex
 		
 		let result = NSMutableAttributedString(string: text, attributes: self.inputAttributes)
-		var inputSymbolNumber = 0
+		var inputSymbolNumber = 0 // for result
 		var maskSymbolNumber = 0
 		let string = result.string
-		var inputIndex = string.startIndex
+		var inputIndex = string.startIndex // for string
 		var formatCurrentIndex = format.startIndex
 		var isFirstInputSymbol = true
 		var shouldEnd = false
@@ -445,7 +445,6 @@ extension FormattableInputInternal {
 					isFirstInputSymbol = false
 					if !prevFormat.isEmpty {
 						result.insert(NSAttributedString(string: prevFormat, attributes: self.maskAttributes), at: 0)
-						
 						inputSymbolNumber += prevFormat.count
 					}
 				} else {
@@ -470,17 +469,17 @@ extension FormattableInputInternal {
 				// It is needed when user pastes text with mask symbols.
 				if allowIncrementingInputSymbolIndex {
 					if !self.formatSymbols[char]!.contains(string[inputIndex].unicodeScalars.first!) {
-//						let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
+						let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
 						if prevFormat.isEmpty {
 							return result.attributedSubstring(from: NSRange(location: 0, length: inputSymbolNumber))
 						}
 						// Delete mask characters from input string.
 						// TODO: better implementation
 						for formatChar in prevFormat {
-							if result.string[inputIndex] == formatChar {
+							if string[inputIndex] == formatChar {
 								result.deleteCharacters(in: NSMakeRange(inputSymbolNumber, 1))
 								allowIncrementingInputSymbolIndex = false
-								if inputIndex == result.string.endIndex {
+								if inputIndex == string.endIndex {
 									break
 								}
 							} else {
@@ -489,15 +488,16 @@ extension FormattableInputInternal {
 						}
 					}
 					inputSymbolNumber += 1
-					if inputIndex != result.string.endIndex {
-						inputIndex = result.string.index(after: inputIndex)
+					if inputIndex != string.endIndex {
+						inputIndex = string.index(after: inputIndex)
 					}
 				}
 				if !allowIncrementingInputSymbolIndex {
 					switch maskAppearance {
 					case .whole:
-						result.insert(NSAttributedString(string: String(char), attributes: self.maskAttributes), at: inputSymbolNumber)
-						inputSymbolNumber += 1
+						let insertedString = "\(prevFormat)\(char)"
+						result.insert(NSAttributedString(string: insertedString, attributes: self.maskAttributes), at: inputSymbolNumber)
+						inputSymbolNumber += insertedString.count
 					default:
 						break
 					}
