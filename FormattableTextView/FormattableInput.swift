@@ -413,6 +413,10 @@ public extension FormattableInput {
 			return self.formatted(text: text).string
 		}
 	}
+	
+	func formatted(text: String) -> NSAttributedString {
+		return (self as! FormattableInputInternal).formatted(text: text)
+	}
 }
 
 extension FormattableInputInternal {
