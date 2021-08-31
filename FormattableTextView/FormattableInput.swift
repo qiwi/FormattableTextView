@@ -70,13 +70,16 @@ public protocol FormattableInput: UITextInput {
 	
 	var formatSymbols: [Character : CharacterSet] { get set }
 	
+	var includeNonInputSymbolsAtTheEnd: Bool { get set }
 	
 	/// x inset for input text and placeholders, may be set by user
 	var insetX: CGFloat { get set }
 	
 	var keyboardType: UIKeyboardType { get set }
 	
-	var formattedText: String? { get }
+	var formattedText: String { get }
+	
+	func formatted(text: String) -> NSAttributedString
 }
 
 internal protocol FormattableInputInternal: FormattableInput where Self: UIView {
@@ -334,7 +337,7 @@ extension FormattableInputInternal {
 		}
 		maskPlaceholders = newMaskPlaceholders
 		
-		if let nonInputSymbolsAtTheEnd = self.nonInputSymbolsAtTheEnd {
+		if self.includeNonInputSymbolsAtTheEnd, let nonInputSymbolsAtTheEnd = self.nonInputSymbolsAtTheEnd {
 			var shouldCalculateDx = false
 			switch maskAppearance {
 			case .leftOnly:
@@ -404,44 +407,124 @@ extension FormattableInputInternal {
 }
 
 public extension FormattableInput {
-	var formattedText: String? {
+	var formattedText: String {
 		get {
-			var text = text(in: textRange(from: self.beginningOfDocument, to: self.endOfDocument) ?? UITextRange()) ?? ""
-			guard let currentFormat = currentFormat else {
-				return text
-			}
+			let text = text(in: textRange(from: self.beginningOfDocument, to: self.endOfDocument) ?? UITextRange()) ?? ""
+			return self.formatted(text: text).string
+		}
+	}
+}
 
-			var result = ""
+extension FormattableInputInternal {
+	
+	public func formatted(text: String) -> NSAttributedString {
+		guard let format = currentFormat else {
+			return NSAttributedString(string: text, attributes: self.inputAttributes)
+		}
+		var state = MaskState.mask
+		var formatCurrentStartIndex = format.startIndex
+		
+		let result = NSMutableAttributedString(string: text, attributes: self.inputAttributes)
+		var inputSymbolNumber = 0
+		var maskSymbolNumber = 0
+		let string = result.string
+		var inputIndex = string.startIndex
+		var formatCurrentIndex = format.startIndex
+		var isFirstInputSymbol = true
+		var shouldEnd = false
+		
+		for char in format {
+			var allowIncrementingInputSymbolIndex = (inputIndex != string.endIndex)
+			let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
+			let isUserSymbol = self.formatInputChars.contains(char)
 			
-			var shouldBreakLoopForLeftAndRight = false
-			var isWholeEnding = false
-			for (index, char) in currentFormat.enumerated() {
-				if formatSymbols.keys.contains(char) && !isWholeEnding {
-					if shouldBreakLoopForLeftAndRight || text.isEmpty {
-						break
-					}
-					result.append(text[text.startIndex])
-					text.remove(at: text.startIndex)
-					if text.isEmpty {
-						var shouldBreakLoop = false
-						switch self.maskAppearance {
-						case .leftOnly:
-							shouldBreakLoop = true
-						case .leftAndRight:
-							shouldBreakLoopForLeftAndRight = true
-						case .whole:
-							isWholeEnding = true
-						}
-						if shouldBreakLoop {
-							break
-						}
+			if state == .mask && isUserSymbol {
+				state = .input
+				
+				if isFirstInputSymbol {
+					isFirstInputSymbol = false
+					if !prevFormat.isEmpty {
+						result.insert(NSAttributedString(string: prevFormat, attributes: self.maskAttributes), at: 0)
+						
+						inputSymbolNumber += prevFormat.count
 					}
 				} else {
-					let currentIndex = currentFormat.index(result.startIndex, offsetBy: index)
-					result.append(currentFormat[currentIndex])
+					if (maskAppearance.isWhole && allowIncrementingInputSymbolIndex || !maskAppearance.isWhole) && !string.isEmpty {
+						result.insert(NSAttributedString(string: prevFormat, attributes: self.maskAttributes), at: inputSymbolNumber)
+						inputSymbolNumber += prevFormat.count
+					}
+				}
+				if shouldEnd {
+					break
+				}
+			} else if state == .input && !isUserSymbol {
+				state = .mask
+				formatCurrentStartIndex = formatCurrentIndex
+			}
+			
+			if state == .input {
+				if shouldEnd || (string.isEmpty && !maskAppearance.isWhole) {
+					break
+				}
+				// Check if current area of input string starts with a tail of previous mask area. If it is true then delete those characters.
+				// It is needed when user pastes text with mask symbols.
+				if allowIncrementingInputSymbolIndex {
+					if !self.formatSymbols[char]!.contains(string[inputIndex].unicodeScalars.first!) {
+//						let prevFormat = String(format[formatCurrentStartIndex..<formatCurrentIndex])
+						if prevFormat.isEmpty {
+							return result.attributedSubstring(from: NSRange(location: 0, length: inputSymbolNumber))
+						}
+						// Delete mask characters from input string.
+						// TODO: better implementation
+						for formatChar in prevFormat {
+							if result.string[inputIndex] == formatChar {
+								result.deleteCharacters(in: NSMakeRange(inputSymbolNumber, 1))
+								allowIncrementingInputSymbolIndex = false
+								if inputIndex == result.string.endIndex {
+									break
+								}
+							} else {
+								return result.attributedSubstring(from: NSRange(location: 0, length: inputSymbolNumber))
+							}
+						}
+					}
+					inputSymbolNumber += 1
+					if inputIndex != result.string.endIndex {
+						inputIndex = result.string.index(after: inputIndex)
+					}
+				}
+				if !allowIncrementingInputSymbolIndex {
+					switch maskAppearance {
+					case .whole:
+						result.insert(NSAttributedString(string: String(char), attributes: self.maskAttributes), at: inputSymbolNumber)
+						inputSymbolNumber += 1
+					default:
+						break
+					}
 				}
 			}
-			return result
+			if inputIndex == string.endIndex && !string.isEmpty && !shouldEnd {
+				var shouldBreak = false
+				switch maskAppearance {
+				case .leftOnly:
+					shouldBreak = true
+				case .leftAndRight:
+					shouldEnd = true
+				case .whole:
+					break // exit from switch statement
+				}
+				if shouldBreak {
+					break // exit from loop
+				}
+			}
+			formatCurrentIndex = format.index(after: formatCurrentIndex)
+			maskSymbolNumber += 1
 		}
+		
+		if self.includeNonInputSymbolsAtTheEnd, let nonInputSymbolsAtTheEnd = self.nonInputSymbolsAtTheEnd {
+			result.append(NSAttributedString(string: nonInputSymbolsAtTheEnd, attributes: self.maskAttributes))
+		}
+		
+		return result
 	}
 }

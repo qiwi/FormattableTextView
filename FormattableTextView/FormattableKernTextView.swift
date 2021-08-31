@@ -67,6 +67,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     }
 	
 	public var allowSmartSuggestions: Bool = false
+	public var includeNonInputSymbolsAtTheEnd: Bool = true
     
 	internal func replaceText(inRange range: NSRange, withText text: String) {
 		let result = self.processAttributesForTextAndMask(range: range, replacementText: text)

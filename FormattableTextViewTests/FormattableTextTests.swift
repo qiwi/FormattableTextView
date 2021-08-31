@@ -33,6 +33,7 @@ class FormattableTextTests: XCTestCase {
 		let tv = FormattableKernTextView()
 		tv.formats = ["w*45d-_*asdf"]
 		tv.text = "t(9"
+		tv.includeNonInputSymbolsAtTheEnd = false
 		
 		let result = tv.formattedText
 		XCTAssertEqual(result, "t(459")
@@ -43,6 +44,7 @@ class FormattableTextTests: XCTestCase {
 		tv.formats = ["w*45d-_*asdf"]
 		tv.text = "t(9"
 		tv.maskAppearance = .leftAndRight
+		tv.includeNonInputSymbolsAtTheEnd = false
 		
 		let result = tv.formattedText
 		XCTAssertEqual(result, "t(459-_")
@@ -53,6 +55,7 @@ class FormattableTextTests: XCTestCase {
 		tv.formats = ["w*45d-_*asdf"]
 		tv.text = "t(9"
 		tv.maskAppearance = .whole(placeholders: [:])
+		tv.includeNonInputSymbolsAtTheEnd = false
 		
 		let result = tv.formattedText
 		XCTAssertEqual(result, "t(459-_*asdf")
@@ -72,5 +75,17 @@ class FormattableTextTests: XCTestCase {
 
 		let result = tv.formattedText
 		XCTAssertEqual(result, "non-formatted text")
+	}
+	
+	func testFormattedText() {
+		let tv = FormattableTextField()
+		tv.formats = ["dddddddd $"]
+		tv.inputAttributes = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.black]
+		tv.maskAttributes = [.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.gray]
+		
+		let result = tv.formatted(text: "123")
+		let expectedResult = NSMutableAttributedString(string: "123", attributes: tv.inputAttributes)
+		expectedResult.append(NSAttributedString(string: " $", attributes: tv.maskAttributes))
+		XCTAssertEqual(result, expectedResult)
 	}
 }
