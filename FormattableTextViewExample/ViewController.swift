@@ -31,7 +31,8 @@ final class ViewController: UIViewController {
 		["dddd dddd dddd dddd"],
 		["wdddww dd"],
 		["+7 (ddd) ddd-dd-dd",
-		"+44 07ddd dddddd"],
+		 "+44 dddddd ddd",
+		 "+ddddddddddddddd"],
 		["dddddd ₽"]
 	]
 	
@@ -58,6 +59,7 @@ final class ViewController: UIViewController {
 			tv.keyboardType = oldView.keyboardType
 			tv.backgroundColor = UIColor.white
 			tv.formats = formats[i]
+			tv.formatSelectionStrategy = .startFromFirst
 			tv.formatSymbols = ["d": CharacterSet.decimalDigits,
 								"0": CharacterSet(charactersIn: "0"),
 								"4": CharacterSet(charactersIn: "4"),

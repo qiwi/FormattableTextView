@@ -98,6 +98,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 			processNonInputSymbolsAtTheEnd()
         }
     }
+	public var formatSelectionStrategy: FormatSelectionStrategy = .startFromCurrent
 	
 	public internal(set) var currentFormat: String?
 	
@@ -170,6 +171,7 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     }
     
     internal var maskLayers = [Int: CALayer]()
+	internal var maskLayersTemp = [Int: CALayer]()
     
     public var formatSymbols: [Character: CharacterSet] = ["d": CharacterSet.decimalDigits,
                                                          "w": CharacterSet.letters,

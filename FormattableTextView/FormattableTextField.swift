@@ -32,6 +32,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 			processNonInputSymbolsAtTheEnd()
 		}
 	}
+	public var formatSelectionStrategy: FormatSelectionStrategy = .startFromCurrent
 	
 	public internal(set) var currentFormat: String?
 	
@@ -77,6 +78,7 @@ open class FormattableTextField: UITextField, FormattableInput, FormattableInput
 	}
 	
 	internal var maskLayers = [Int: CALayer]()
+	internal var maskLayersTemp = [Int: CALayer]()
 	internal var maskPlaceholders = [CALayer]()
 	
 	internal var formatInputChars: Set<Character>!

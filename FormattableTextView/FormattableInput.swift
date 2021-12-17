@@ -30,6 +30,13 @@ public enum MaskAppearance {
 	}
 }
 
+
+/// How to choose format from `formats` property
+public enum FormatSelectionStrategy {
+	case startFromCurrent
+	case startFromFirst
+}
+
 internal enum MaskState {
 	case mask
 	case input
@@ -53,10 +60,10 @@ internal enum ProcessAttributesResult {
 }
 
 public protocol FormattableInput: UITextInput {
+	var text: String! { get set }
 	var currentFormat: String? { get }
-	
 	var formats: [String] { get set }
-	
+	var formatSelectionStrategy: FormatSelectionStrategy { get set }
 	var maskAppearance: FormattableTextView.MaskAppearance { get set }
 	
 	/// Allow inserting space character at the beginning of the text. It is required behavior in order to use iOS smart suggestions, e.g. telephone number.
@@ -67,16 +74,12 @@ public protocol FormattableInput: UITextInput {
 	
 	/// Non-input symbols will be drawn with these attributes
 	var maskAttributes: [NSAttributedString.Key : Any]! { get set }
-	
 	var formatSymbols: [Character : CharacterSet] { get set }
-	
 	var includeNonInputSymbolsAtTheEnd: Bool { get set }
 	
 	/// x inset for input text and placeholders, may be set by user
 	var insetX: CGFloat { get set }
-	
 	var keyboardType: UIKeyboardType { get set }
-	
 	var formattedText: String { get }
 	
 	func formatted(text: String) -> NSAttributedString
@@ -90,6 +93,7 @@ internal protocol FormattableInputInternal: FormattableInput where Self: UIView 
 	
 	/// Non-input elements of format which will be drawn in separate layers
 	var maskLayers: [Int: CALayer] { get set }
+	var maskLayersTemp: [Int: CALayer] { get set }
 	var maskPlaceholders: [CALayer] { get set }
 
 	var backgroundColor: UIColor? { get }
@@ -203,17 +207,30 @@ extension FormattableInputInternal {
 	}
 	
 	func processAttributesForTextAndMask(range: NSRange, replacementText: String) -> ProcessAttributesResult {
-		var result = processAttributesForTextAndMaskInternal(range: range, replacementText: replacementText, format: currentFormat)
-		if case .allowed = result {
-			return result
+		var result: ProcessAttributesResult = .withoutFormat
+		if case .startFromCurrent = self.formatSelectionStrategy {
+			result = processAttributesForTextAndMaskInternal(range: range, replacementText: replacementText, format: currentFormat)
+			if case .allowed = result {
+				return result
+			}
 		}
 		for format in formats {
-			if format == currentFormat { continue }
+			if case .startFromCurrent = self.formatSelectionStrategy, format == currentFormat {
+				continue
+			}
+			maskLayersTemp = maskLayers
+			maskLayers.removeAll()
 			result = processAttributesForTextAndMaskInternal(range: range, replacementText: replacementText, format: format)
 			switch result {
 			case .notAllowed:
+				maskLayers = maskLayersTemp
+				maskLayersTemp.removeAll()
 				continue
 			default:
+				maskLayersTemp.values.forEach {
+					$0.removeFromSuperlayer()
+				}
+				maskLayersTemp.removeAll()
 				currentFormat = format
 				return result
 			}
