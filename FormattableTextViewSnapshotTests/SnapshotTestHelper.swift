@@ -35,7 +35,7 @@ func assert(_ view: UIView,
 			file: StaticString = #file,
 			testName: String = #function,
 			line: UInt = #line) {
-	guard UIScreen.main.nativeScale == 3 else {
+	guard UIScreen.main.scale == 3 else {
 		fatalError("Use 3x device")
 	}
 	let named = "iOS\(ProcessInfo.processInfo.operatingSystemVersion.majorVersion)"
