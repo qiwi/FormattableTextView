@@ -22,7 +22,11 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
 	}
 	
 	public convenience init() {
-		self.init(frame: CGRect.zero, textContainer: nil)
+		self.init(frame: CGRect.zero)
+	}
+	
+	public convenience init(frame: CGRect) {
+		self.init(frame: frame, textContainer: nil)
 	}
 	
 	public override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -154,7 +158,10 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     private var coreIndicesInPureInputSymbols = [Int: CGFloat]()
     
     /// Input symbols will be drawn with these attributes
-    public var inputAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)] {
+    public var inputAttributes: [NSAttributedString.Key: Any] = [
+		.font: UIFont.systemFont(ofSize: 16),
+		.foregroundColor: UIColor.black,
+	] {
         didSet {
             for (key, value) in inputAttributes {
                 maskAttributes[key] = value
@@ -182,11 +189,12 @@ open class FormattableKernTextView: UITextView, FormattableInput, FormattableInp
     }
     internal var formatInputChars: Set<Character>!
 	
+	public var shouldUpdateOnFirstLayout = true
 	private var isFirstLayout = true
 	
 	open override func layoutSubviews() {
 		super.layoutSubviews()
-		if isFirstLayout && self.bounds != CGRect.zero {
+		if shouldUpdateOnFirstLayout && isFirstLayout && self.bounds != CGRect.zero {
 			isFirstLayout = false
 			_ = self.delegateProxy.textView(self, shouldChangeTextIn: NSMakeRange(0, self.text.count), replacementText: "")
 		}

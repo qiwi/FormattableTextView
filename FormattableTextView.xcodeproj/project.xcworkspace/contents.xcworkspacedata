@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/m.motyzhenkov/Documents/ios/FormattedTextView/FormattableTextView.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
