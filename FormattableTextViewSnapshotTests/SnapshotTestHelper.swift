@@ -40,6 +40,6 @@ func assert(_ view: UIView,
 	}
 	let named = "iOS\(ProcessInfo.processInfo.operatingSystemVersion.majorVersion)"
 	if let result = verifySnapshot(matching: view, as: .image, named: named, file: file, testName: testName, line: line) {
-		XCTFail(result)
+		XCTFail(result) 
 	}
 }
